@@ -3,61 +3,60 @@
 // What is ASCIIART? Check the README.md or Workshop to see why ASCIIART is defined in your file.
 const ASCIIART = [
   `<br><br>
-  +---+<br>
-  |   |<br>
-  O   |<br>
+  +-----+<br>
+  |     |<br>
+  O     |<br>
  /|\\\  |<br>
  / \\\  |<br>
-      |<br>
+        |<br>
 =========`,
   `<br><br>
-  +---+<br>
-  |   |<br>
-  O   |<br>
+  +-----+<br>
+  |     |<br>
+  O     |<br>
  /|\\\  |<br>
- /    |<br>
-      |<br>
-      <br>
+ /      |<br>
+        |<br>
 =========`,
   `<br><br>
-  +---+<br>
-  |   |<br>
-  O   |<br>
+  +-----+<br>
+  |     |<br>
+  O     |<br>
  /|\\\  |<br>
-      |<br>
-      |<br>
+        |<br>
+        |<br>
 =========`,
   `<br><br>
-  +---+<br>
-  |   |<br>
-  O   |<br>
- /|   |<br>
-      |<br>
-      |<br>
+  +-----+<br>
+  |     |<br>
+  O     |<br>
+ /|     |<br>
+        |<br>
+        |<br>
 =========`,
   `<br><br>
-  +---+<br>
-  |   |<br>
-  O   |<br>
-  |   |<br>
-      |<br>
-      |<br>
+  +-----+<br>
+  |     |<br>
+  O     |<br>
+  |     |<br>
+        |<br>
+        |<br>
 =========`,
   `<br><br>
-  +---+<br>
-  |   |<br>
-  O   |<br>
-      |<br>
-      |<br>
-      |<br>
+  +-----+<br>
+  |     |<br>
+  O     |<br>
+        |<br>
+        |<br>
+        |<br>
 =========`,
   `<br><br>
-  +---+<br>
-  |   |<br>
-      |<br>
-      |<br>
-      |<br>
-      |<br>
+  +-----+<br>
+  |     |<br>
+        |<br>
+        |<br>
+        |<br>
+        |<br>
 =========`,
 ];
 
@@ -97,10 +96,15 @@ class RopeDude {
         ASCIIART[this.remainingGuesses]
       }`;
     } else if (this.gameState === 'lost') {
+      $('body').addClass('game-over');
+      $('.start').text('Play again!');
+      $('.start').removeClass('hide');
       return `Game Over, the word was "${this.secretWord.join('')}"${
         ASCIIART[this.remainingGuesses]
       }`;
     } else {
+      $('.start').text('Play again!');
+      $('.start').removeClass('hide');
       return 'Winner Winner Chicken Dinner, you won!';
     }
   }
@@ -128,6 +132,11 @@ const secretWordBank = [
 
 let game;
 
+const playSound = (name) => {
+  const audio = new Audio(`sounds/${name}.mp3`);
+  audio.play();
+};
+
 const startGame = () => {
   const wordIdx = Math.floor(Math.random() * secretWordBank.length);
   game = new RopeDude(secretWordBank[wordIdx]);
@@ -135,17 +144,19 @@ const startGame = () => {
   $('#title-progress').text(game.progress.join(''));
   $('.form').removeClass('hide');
   $('.start').addClass('hide');
+  $('body').removeClass('game-over');
 };
 
 $('.start').click(function handler() {
   startGame();
 });
 
-$('.submit-button').submit(function () {
-  const currentGuess = $('.guess').val();
+$('.submit-button').click(function () {
+  const currentGuess = $('#guess').val();
+  $('#guess').val('');
   game.submitGuess(currentGuess);
-  game.computeGameState();
-  game.getGameStateMessage();
+  $('h1').text(game.computeGameState());
+  $('.message').html(game.getGameStateMessage());
 });
 // function simulateRopeDude() {
 //   const wordIdx = Math.floor(Math.random() * secretWordBank.length);
