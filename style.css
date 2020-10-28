@@ -1,0 +1,47 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background-color: #011f3f;
+}
+
+button {
+  font-size: 1.5rem;
+  border-radius: 10px;
+  background-color: maroon;
+  color: white;
+  border-radius: 10%;
+}
+
+#title-progress {
+  font-size: 3rem;
+  margin: 5%;
+  color: white;
+}
+
+.message {
+  font-size: 1.25rem;
+  margin: 5%;
+  color: white;
+}
+
+.form {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.game-over {
+  background-color: darkred;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.submit-button {
+  background-color: slategray;
+  color: white;
+}
+
+.container {
+  text-align: center;
+}

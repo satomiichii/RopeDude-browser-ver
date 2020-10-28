@@ -2,62 +2,62 @@
 /* eslint-disable no-unused-vars */
 // What is ASCIIART? Check the README.md or Workshop to see why ASCIIART is defined in your file.
 const ASCIIART = [
-  `
-  +---+
-  |   |
-  O   |
- /|\\\  |
- / \\\  |
-      |
+  `<br><br>
+  +---+<br>
+  |   |<br>
+  O   |<br>
+ /|\\\  |<br>
+ / \\\  |<br>
+      |<br>
 =========`,
-  `
-  +---+
-  |   |
-  O   |
- /|\\\  |
- /    |
-      |
-      
+  `<br><br>
+  +---+<br>
+  |   |<br>
+  O   |<br>
+ /|\\\  |<br>
+ /    |<br>
+      |<br>
+      <br>
 =========`,
-  `
-  +---+
-  |   |
-  O   |
- /|\\\  |
-      |
-      |
+  `<br><br>
+  +---+<br>
+  |   |<br>
+  O   |<br>
+ /|\\\  |<br>
+      |<br>
+      |<br>
 =========`,
-  `
-  +---+
-  |   |
-  O   |
- /|   |
-      |
-      |
+  `<br><br>
+  +---+<br>
+  |   |<br>
+  O   |<br>
+ /|   |<br>
+      |<br>
+      |<br>
 =========`,
-  `
-  +---+
-  |   |
-  O   |
-  |   |
-      |
-      |
+  `<br><br>
+  +---+<br>
+  |   |<br>
+  O   |<br>
+  |   |<br>
+      |<br>
+      |<br>
 =========`,
-  `
-  +---+
-  |   |
-  O   |
-      |
-      |
-      |
+  `<br><br>
+  +---+<br>
+  |   |<br>
+  O   |<br>
+      |<br>
+      |<br>
+      |<br>
 =========`,
-  `
-  +---+
-  |   |
-      |
-      |
-      |
-      |
+  `<br><br>
+  +---+<br>
+  |   |<br>
+      |<br>
+      |<br>
+      |<br>
+      |<br>
 =========`,
 ];
 
@@ -82,9 +82,7 @@ class RopeDude {
       (elm) => this.lettersGuessed.includes(elm) || elm === ' '
     );
     if (this.remainingGuesses && allGuessed) this.gameState = 'won';
-  }
 
-  getSecretWordPuzzle() {
     this.secretWord.forEach((elm, idx) => {
       if (this.lettersGuessed.includes(elm)) {
         this.progress[idx] = elm;
@@ -95,11 +93,13 @@ class RopeDude {
 
   getGameStateMessage() {
     if (this.gameState === 'playing') {
-      return `There is a total of ${this.remainingGuesses} guesses remaining:
-        ${ASCIIART[this.remainingGuesses]}`;
+      return `There is a total of ${this.remainingGuesses} guesses remaining:${
+        ASCIIART[this.remainingGuesses]
+      }`;
     } else if (this.gameState === 'lost') {
-      return `Game Over, the word was "${this.secretWord.join('')}":
-      ${ASCIIART[this.remainingGuesses]}`;
+      return `Game Over, the word was "${this.secretWord.join('')}"${
+        ASCIIART[this.remainingGuesses]
+      }`;
     } else {
       return 'Winner Winner Chicken Dinner, you won!';
     }
@@ -126,22 +126,43 @@ const secretWordBank = [
   'road trip',
 ];
 
-function simulateRopeDude() {
+let game;
+
+const startGame = () => {
   const wordIdx = Math.floor(Math.random() * secretWordBank.length);
-  const game = new RopeDude(secretWordBank[wordIdx]);
+  game = new RopeDude(secretWordBank[wordIdx]);
+  $('.message').html(game.getGameStateMessage());
+  $('#title-progress').text(game.progress.join(''));
+  $('.form').removeClass('hide');
+  $('.start').addClass('hide');
+};
 
-  function simulater() {
-    let randomCharCode = Math.floor(Math.random() * 26) + 97;
-    let currentGuess = String.fromCharCode(randomCharCode);
+$('.start').click(function handler() {
+  startGame();
+});
 
-    while (game.gameState === 'playing') {
-      game.submitGuess(currentGuess);
-      game.computeGameState();
-      game.getSecretWordPuzzle();
-      game.getGameStateMessage();
-      simulater();
-    }
-    return game.getGameStateMessage();
-  }
-  return simulater();
-}
+$('.submit-button').submit(function () {
+  const currentGuess = $('.guess').val();
+  game.submitGuess(currentGuess);
+  game.computeGameState();
+  game.getGameStateMessage();
+});
+// function simulateRopeDude() {
+//   const wordIdx = Math.floor(Math.random() * secretWordBank.length);
+//   const game = new RopeDude(secretWordBank[wordIdx]);
+
+//   function simulater() {
+//     let randomCharCode = Math.floor(Math.random() * 26) + 97;
+//     let currentGuess = String.fromCharCode(randomCharCode);
+
+//     while (game.gameState === 'playing') {
+//       game.submitGuess(currentGuess);
+//       game.computeGameState();
+//       game.getSecretWordPuzzle();
+//       game.getGameStateMessage();
+//       simulater();
+//     }
+//     return game.getGameStateMessage();
+//   }
+//   return simulater();
+// }
