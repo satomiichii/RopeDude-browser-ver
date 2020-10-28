@@ -60,6 +60,11 @@ const ASCIIART = [
 =========`,
 ];
 
+const playSound = (name) => {
+  const audio = new Audio(`sounds/${name}.mp3`);
+  audio.play();
+};
+
 class RopeDude {
   constructor(word) {
     this.remainingGuesses = 6;
@@ -103,6 +108,7 @@ class RopeDude {
         ASCIIART[this.remainingGuesses]
       }`;
     } else {
+      $('body').addClass('win');
       $('.start').text('Play again!');
       $('.start').removeClass('hide');
       return 'Winner Winner Chicken Dinner, you won!';
@@ -114,7 +120,12 @@ class RopeDude {
       char = char.toLowerCase();
       if (!this.lettersGuessed.includes(char)) {
         this.lettersGuessed.push(char);
-        if (!this.secretWord.includes(char)) this.remainingGuesses--;
+        if (!this.secretWord.includes(char)) {
+          this.remainingGuesses--;
+          playSound('lost');
+        } else {
+          playSound('correct');
+        }
       }
     }
   }
@@ -132,11 +143,6 @@ const secretWordBank = [
 
 let game;
 
-const playSound = (name) => {
-  const audio = new Audio(`sounds/${name}.mp3`);
-  audio.play();
-};
-
 const startGame = () => {
   const wordIdx = Math.floor(Math.random() * secretWordBank.length);
   game = new RopeDude(secretWordBank[wordIdx]);
@@ -144,7 +150,8 @@ const startGame = () => {
   $('#title-progress').text(game.progress.join(''));
   $('.form').removeClass('hide');
   $('.start').addClass('hide');
-  $('body').removeClass('game-over');
+  $('body').removeClass('game-over win');
+  playSound('newgame');
 };
 
 $('.start').click(function handler() {
